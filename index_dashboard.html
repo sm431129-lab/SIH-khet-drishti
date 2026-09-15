@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        SIH Smart Farming Dashboard
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <!-- Chart.js -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js"
+    ></script>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="header">
+
+        <div>
+
+            <h1>
+                🌾 SIH SMART FARMING
+            </h1>
+
+            <p>
+                Edge-AI Field Monitoring & Intelligence
+            </p>
+
+        </div>
+
+
+        <div class="connection">
+
+            <span
+                id="connectionDot"
+                class="dot offline">
+            </span>
+
+            <span id="connectionText">
+                Connecting...
+            </span>
+
+        </div>
+
+        <a href="khet_drishti_connected.html" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:9px;background:#f59e0b;color:#172033;text-decoration:none;font-weight:800;font-size:12px;">🌱 Crop Health Check</a>
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main>
+
+
+        <!-- =================================================
+             OVERVIEW
+        ================================================== -->
+
+        <section class="overview">
+
+
+            <div class="risk-card">
+
+                <p>
+                    OVERALL FIELD RISK
+                </p>
+
+                <h2 id="fieldRisk">
+                    WAITING
+                </h2>
+
+                <span id="riskDescription">
+                    Waiting for Gateway data
+                </span>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <p>
+                    GATEWAY
+                </p>
+
+                <h3 id="gatewayStatus">
+                    OFFLINE
+                </h3>
+
+                <span>
+                    Edge Intelligence
+                </span>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <p>
+                    ACTIVE NODES
+                </p>
+
+                <h3 id="activeNodes">
+                    0 / 3
+                </h3>
+
+                <span>
+                    Field monitoring nodes
+                </span>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             FIELD ZONES
+        ================================================== -->
+
+        <section>
+
+            <div class="section-title">
+
+                <h2>
+                    FIELD ZONES
+                </h2>
+
+                <span>
+                    Live sensor data
+                </span>
+
+            </div>
+
+
+            <div class="zones">
+
+
+                <!-- ===============================
+                     ZONE 1
+                ================================ -->
+
+                <div
+                    class="zone-card"
+                    id="zone1Card"
+                >
+
+                    <div class="zone-header">
+
+                        <div>
+
+                            <span class="zone-number">
+                                ZONE 1
+                            </span>
+
+                            <h3>
+                                Node 1
+                            </h3>
+
+                        </div>
+
+
+                        <span
+                            class="status-badge"
+                            id="zone1Status"
+                        >
+                            WAITING
+                        </span>
+
+                    </div>
+
+
+                    <div class="sensor-grid">
+
+
+                        <div class="sensor">
+
+                            <span>
+                                💧 Soil Moisture
+                            </span>
+
+                            <strong id="n1Moisture">
+                                -- %
+                            </strong>
+
+                        </div>
+
+
+                        <div class="sensor">
+
+                            <span>
+                                🌡 Temperature
+                            </span>
+
+                            <strong id="n1Temp">
+                                -- °C
+                            </strong>
+
+                        </div>
+
+
+                        <div class="sensor">
+
+                            <span>
+                                💨 Humidity
+                            </span>
+
+                            <strong id="n1Humidity">
+                                -- %
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="zone-action">
+
+                        <span>
+                            RECOMMENDED ACTION
+                        </span>
+
+                        <strong id="n1Action">
+                            Waiting for data
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ===============================
+                     ZONE 2
+                ================================ -->
+
+                <div
+                    class="zone-card"
+                    id="zone2Card"
+                >
+
+                    <div class="zone-header">
+
+                        <div>
+
+                            <span class="zone-number">
+                                ZONE 2
+                            </span>
+
+                            <h3>
+                                Node 2
+                            </h3>
+
+                        </div>
+
+
+                        <span
+                            class="status-badge"
+                            id="zone2Status"
+                        >
+                            WAITING
+                        </span>
+
+                    </div>
+
+
+                    <div class="sensor-grid">
+
+
+                        <div class="sensor">
+
+                            <span>
+                                💧 Soil Moisture
+                            </span>
+
+                            <strong id="n2Moisture">
+                                -- %
+                            </strong>
+
+                        </div>
+
+
+                        <div class="sensor">
+
+                            <span>
+                                🌡 Temperature
+                            </span>
+
+                            <strong id="n2Temp">
+                                -- °C
+                            </strong>
+
+                        </div>
+
+
+                        <div class="sensor">
+
+                            <span>
+                                💨 Humidity
+                            </span>
+
+                            <strong id="n2Humidity">
+                                -- %
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="zone-action">
+
+                        <span>
+                            RECOMMENDED ACTION
+                        </span>
+
+                        <strong id="n2Action">
+                            Waiting for data
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ===============================
+                     ZONE 3
+                ================================ -->
+
+                <div
+                    class="zone-card"
+                    id="zone3Card"
+                >
+
+                    <div class="zone-header">
+
+                        <div>
+
+                            <span class="zone-number">
+                                ZONE 3
+                            </span>
+
+                            <h3>
+                                Node 3 + Camera
+                            </h3>
+
+                        </div>
+
+
+                        <span
+                            class="status-badge"
+                            id="zone3Status"
+                        >
+                            WAITING
+                        </span>
+
+                    </div>
+
+
+                    <div class="sensor-grid">
+
+
+                        <div class="sensor">
+
+                            <span>
+                                💧 Soil Moisture
+                            </span>
+
+                            <strong id="n3Moisture">
+                                -- %
+                            </strong>
+
+                        </div>
+
+
+                        <div class="sensor">
+
+                            <span>
+                                🌡 Temperature
+                            </span>
+
+                            <strong id="n3Temp">
+                                -- °C
+                            </strong>
+
+                        </div>
+
+
+                        <div class="sensor">
+
+                            <span>
+                                💨 Humidity
+                            </span>
+
+                            <strong id="n3Humidity">
+                                -- %
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="camera-box">
+
+                        <span>
+                            📷 CAMERA SURVEILLANCE
+                        </span>
+
+                        <strong id="cameraEvent">
+                            NO EVENT
+                        </strong>
+
+                    </div>
+
+
+                    <div class="zone-action">
+
+                        <span>
+                            RECOMMENDED ACTION
+                        </span>
+
+                        <strong id="n3Action">
+                            Waiting for data
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             HISTORICAL TRENDS
+        ================================================== -->
+
+        <section class="trends-section">
+
+
+            <div class="section-title">
+
+                <div>
+
+                    <h2>
+                        📈 HISTORICAL TRENDS
+                    </h2>
+
+                    <span>
+                        Live history since dashboard start
+                    </span>
+
+                </div>
+
+                <span id="historyCount">
+                    0 samples
+                </span>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 SOIL MOISTURE
+            ============================================== -->
+
+            <div class="chart-card">
+
+                <div class="chart-header">
+
+                    <div>
+
+                        <h3>
+                            Soil Moisture
+                        </h3>
+
+                        <span>
+                            Zone comparison
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="chart-container">
+
+                    <canvas
+                        id="moistureChart">
+                    </canvas>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 TEMPERATURE
+            ============================================== -->
+
+            <div class="chart-card">
+
+                <div class="chart-header">
+
+                    <div>
+
+                        <h3>
+                            Temperature
+                        </h3>
+
+                        <span>
+                            Field temperature history
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="chart-container">
+
+                    <canvas
+                        id="temperatureChart">
+                    </canvas>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 HUMIDITY
+            ============================================== -->
+
+            <div class="chart-card">
+
+                <div class="chart-header">
+
+                    <div>
+
+                        <h3>
+                            Humidity
+                        </h3>
+
+                        <span>
+                            Field humidity history
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="chart-container">
+
+                    <canvas
+                        id="humidityChart">
+                    </canvas>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 CURRENT ZONE COMPARISON
+            ============================================== -->
+
+            <div class="chart-card">
+
+                <div class="chart-header">
+
+                    <div>
+
+                        <h3>
+                            Current Soil Moisture Comparison
+                        </h3>
+
+                        <span>
+                            Latest Gateway reading
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="comparison-container">
+
+                    <div class="comparison-row">
+
+                        <span>
+                            Zone 1
+                        </span>
+
+                        <div class="comparison-bar">
+
+                            <div
+                                id="bar1"
+                                class="comparison-fill"
+                            ></div>
+
+                        </div>
+
+                        <strong id="bar1Value">
+                            -- %
+                        </strong>
+
+                    </div>
+
+
+                    <div class="comparison-row">
+
+                        <span>
+                            Zone 2
+                        </span>
+
+                        <div class="comparison-bar">
+
+                            <div
+                                id="bar2"
+                                class="comparison-fill"
+                            ></div>
+
+                        </div>
+
+                        <strong id="bar2Value">
+                            -- %
+                        </strong>
+
+                    </div>
+
+
+                    <div class="comparison-row">
+
+                        <span>
+                            Zone 3
+                        </span>
+
+                        <div class="comparison-bar">
+
+                            <div
+                                id="bar3"
+                                class="comparison-fill"
+                            ></div>
+
+                        </div>
+
+                        <strong id="bar3Value">
+                            -- %
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             CAMERA EVENT HISTORY
+        ================================================== -->
+
+        <section class="camera-history-section">
+
+
+            <div class="section-title">
+
+                <div>
+
+                    <h2>
+                        📷 VISUAL SURVEILLANCE HISTORY
+                    </h2>
+
+                    <span>
+                        Node 3 camera-event simulation
+                    </span>
+
+                </div>
+
+                <span id="cameraHistoryCount">
+                    0 events
+                </span>
+
+            </div>
+
+
+            <div
+                id="cameraHistory"
+                class="camera-history"
+            >
+
+                <div class="no-alert">
+
+                    No visual events detected.
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ALERTS
+        ================================================== -->
+
+        <section class="alerts-section">
+
+            <div class="section-title">
+
+                <h2>
+                    ⚠ FIELD ALERTS
+                </h2>
+
+                <span id="alertCount">
+                    0 alerts
+                </span>
+
+            </div>
+
+
+            <div id="alerts">
+
+                <div class="no-alert">
+
+                    No alerts received yet.
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             FARMER DECISION CENTER
+        ================================================== -->
+
+        <section class="decision-center-section">
+
+            <div class="section-title">
+
+                <div>
+                    <h2>🎯 FARMER DECISION CENTER</h2>
+                    <span>AI-assisted priorities for farmer review</span>
+                </div>
+
+                <span id="decisionCount">0 priorities</span>
+
+            </div>
+
+            <div id="decisionCenter">
+                <div class="decision-empty">
+                    Waiting for Gateway analysis...
+                </div>
+            </div>
+
+            <div class="decision-disclaimer">
+                ⚠ System provides recommendations. Final action remains with the farmer.
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             RECOMMENDATIONS
+        ================================================== -->
+
+        <section class="recommendations-section">
+
+            <div class="section-title">
+
+                <h2>
+                    💡 FARMER RECOMMENDATIONS
+                </h2>
+
+            </div>
+
+
+            <div id="recommendations">
+
+                <div class="recommendation">
+
+                    Waiting for Gateway analysis...
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SYSTEM INFORMATION
+        ================================================== -->
+
+        <section class="system-info">
+
+
+            <div>
+
+                <span>
+                    MQTT STATUS
+                </span>
+
+                <strong id="mqttStatus">
+                    DISCONNECTED
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    LAST UPDATE
+                </span>
+
+                <strong id="lastUpdate">
+                    --
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    DATA SOURCE
+                </span>
+
+                <strong>
+                    EDGE GATEWAY
+                </strong>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =====================================================
+         APPLICATION
+    ====================================================== -->
+
+    <script src="app.js"></script>
+
+
+</body>
+
+</html>

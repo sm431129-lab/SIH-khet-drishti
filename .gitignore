@@ -1,0 +1,29 @@
+# PlatformIO
+.pio/
+.piolibdeps/
+libdeps/
+.vscode/
+
+# Build files
+build/
+dist/
+
+# Secrets
+.env
+.env.*
+*.secret
+secrets/
+credentials/
+credentials.*
+config.local.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp

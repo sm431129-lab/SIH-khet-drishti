@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en" id="htmlRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khet Drishti — Field intelligence for every farmer</title>
+<style>
+  :root{
+    --forest:#1B3A2B;
+    --forest-deep:#122A1F;
+    --moss:#6E8F5C;
+    --moss-light:#AFC79A;
+    --amber:#E0972B;
+    --amber-deep:#B9761A;
+    --ink:#1E2621;
+    --mute:#5B665E;
+    --danger:#B23A2E;
+    --line:#E2E7DE;
+    --card:#FFFFFF;
+    --wheat:#F6F3EA;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    font-family:'Segoe UI', Arial, Helvetica, sans-serif;
+    background:var(--wheat);
+    color:var(--ink);
+    line-height:1.5;
+  }
+  body.lang-hi{ font-family:'Nirmala UI', 'Segoe UI', Arial, sans-serif; }
+  h1,h2,h3{ font-family:Cambria, Georgia, 'Times New Roman', serif; font-weight:700; color:var(--forest-deep); }
+  body.lang-hi h1, body.lang-hi h2, body.lang-hi h3{ font-family:'Nirmala UI', Cambria, Georgia, serif; }
+  a{ color:inherit; }
+  .wrap{ max-width:1140px; margin:0 auto; padding:0 28px; }
+  section{ padding:88px 0; }
+  .kicker{ color:var(--amber-deep); font-size:12.5px; font-weight:700; letter-spacing:1.2px; margin-bottom:10px; }
+  .lede{ color:var(--mute); font-size:16px; max-width:56ch; }
+  button{ font-family:inherit; }
+
+  /* NAV */
+  header.nav{
+    position:sticky; top:0; z-index:50; background:rgba(246,243,234,0.92); backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-row{ max-width:1140px; margin:0 auto; padding:0 28px; height:72px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-mark{ width:34px; height:34px; border-radius:9px; background:var(--forest); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .brand-mark svg{ width:18px; height:18px; color:var(--amber); }
+  .brand-name{ font-family:Cambria, Georgia, serif; font-size:18px; font-weight:700; color:var(--forest-deep); }
+  .brand-sub{ font-size:10px; color:var(--mute); letter-spacing:0.5px; margin-top:-2px; }
+  nav.links{ display:flex; gap:30px; }
+  nav.links a{ font-size:14px; font-weight:600; color:var(--ink); text-decoration:none; }
+  nav.links a:hover{ color:var(--forest); }
+  .nav-right{ display:flex; align-items:center; gap:12px; }
+  .lang-switch{
+    display:flex; align-items:center; background:#fff; border:1.5px solid var(--forest); border-radius:20px;
+    padding:3px; cursor:pointer; flex-shrink:0;
+  }
+  .lang-switch button{
+    border:none; background:transparent; padding:6px 13px; font-size:12.5px; font-weight:700; border-radius:16px;
+    cursor:pointer; color:var(--forest); transition:background 0.15s ease, color 0.15s ease;
+  }
+  .lang-switch button.active{ background:var(--forest); color:#fff; }
+  .nav-cta{
+    background:var(--forest); color:#fff; border:none; border-radius:9px; padding:10px 18px;
+    font-size:13.5px; font-weight:700; cursor:pointer;
+  }
+  .nav-toggle{ display:none; }
+
+  /* HERO */
+  .hero{ padding:96px 0 70px; }
+  .hero .wrap{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:56px; align-items:center; }
+  .hero h1{ font-size:44px; line-height:1.12; margin-bottom:18px; }
+  .hero .lede{ margin-bottom:30px; font-size:17px; }
+  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn-primary{
+    background:var(--forest); color:#fff; border:none; border-radius:10px; padding:14px 24px;
+    font-size:14.5px; font-weight:700; cursor:pointer; text-decoration:none; display:inline-block;
+  }
+  .btn-secondary{
+    background:transparent; color:var(--forest); border:1.5px solid var(--forest); border-radius:10px;
+    padding:13px 22px; font-size:14.5px; font-weight:700; cursor:pointer; text-decoration:none; display:inline-block;
+  }
+  .hero-visual{
+    background:var(--forest); border-radius:20px; padding:26px; position:relative; overflow:hidden;
+  }
+  .hero-visual::before{
+    content:''; position:absolute; inset:0; background:radial-gradient(circle at 85% 0%, #2a5a3f 0%, transparent 60%);
+  }
+  .hv-row{ position:relative; display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:22px; }
+  .hv-label{ color:var(--moss-light); font-size:12px; }
+  .hv-score{ color:#fff; font-size:38px; font-weight:700; font-family:Cambria, Georgia, serif; }
+  .hv-score span{ font-size:16px; color:var(--moss-light); font-weight:400; }
+  .hv-trend{ color:var(--amber); font-size:12px; font-weight:700; margin-top:4px; }
+  .hv-stats{ position:relative; display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .hv-stat{ background:rgba(255,255,255,0.08); border-radius:12px; padding:12px 10px; text-align:center; }
+  .hv-stat .n{ color:#fff; font-weight:700; font-size:16px; }
+  .hv-stat .l{ color:var(--moss-light); font-size:10px; margin-top:2px; }
+
+  /* STATS STRIP */
+  .stats-strip{ background:var(--forest-deep); padding:36px 0; }
+  .stats-strip .wrap{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:20px; }
+  .ss-item{ text-align:left; }
+  .ss-item .n{ color:var(--amber); font-size:26px; font-weight:700; font-family:Cambria, Georgia, serif; }
+  .ss-item .l{ color:var(--moss-light); font-size:12.5px; margin-top:2px; }
+
+  /* STEPS */
+  .steps{ background:var(--wheat); }
+  .steps-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; margin-top:44px; }
+  .step-card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px 20px; }
+  .step-num{ font-family:Cambria, Georgia, serif; font-size:26px; color:var(--amber-deep); font-weight:700; margin-bottom:10px; }
+  .step-card h3{ font-size:15.5px; margin-bottom:8px; }
+  .step-card p{ font-size:13px; color:var(--mute); line-height:1.5; }
+
+  /* DEMO */
+  .demo{ background:#fff; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .demo-grid{ display:grid; grid-template-columns:1fr 1fr; gap:30px; margin-top:36px; align-items:stretch; }
+  .panel{ background:var(--wheat); border:1px solid var(--line); border-radius:16px; padding:22px; display:flex; flex-direction:column; }
+  .panel-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; gap:10px; flex-wrap:wrap; }
+  .panel-head h3{ font-size:16px; }
+  .crop-select{ border:1px solid var(--line); border-radius:9px; padding:7px 10px; font-size:12.5px; background:#fff; color:var(--ink); }
+
+  .dropzone{
+    border:2px dashed #c9d1c2; border-radius:14px; background:#fff; min-height:220px; display:flex;
+    flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px;
+    cursor:pointer; position:relative; overflow:hidden; transition:border-color 0.15s ease, background 0.15s ease;
+  }
+  .dropzone.drag{ border-color:var(--amber); background:#fdf6ea; }
+  .dropzone svg{ width:34px; height:34px; color:var(--moss); margin-bottom:10px; }
+  .dropzone .dz-title{ font-size:13.5px; font-weight:700; color:var(--ink); margin-bottom:4px; }
+  .dropzone .dz-sub{ font-size:11.5px; color:var(--mute); max-width:280px; }
+  .dropzone img#previewImg{ display:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .dropzone img#previewImg.show{ display:block; }
+  .dz-overlay{ position:absolute; bottom:10px; left:10px; right:10px; background:rgba(18,42,31,0.82); color:#fff;
+    border-radius:8px; padding:7px 10px; font-size:11px; display:none; }
+  .dz-overlay.show{ display:block; }
+
+  .scan-progress{ display:none; align-items:center; gap:8px; font-size:12px; color:var(--mute); margin-top:12px; }
+  .scan-progress.show{ display:flex; }
+  .spinner{ width:14px; height:14px; border:2px solid var(--line); border-top-color:var(--amber); border-radius:50%; animation:spin 0.8s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .result-card{ display:none; background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin-top:14px; }
+  .result-card.show{ display:block; }
+  .rc-head{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .rc-badge{ width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .rc-badge svg{ width:17px; height:17px; }
+  .rc-title{ font-size:13.5px; font-weight:700; color:var(--ink); }
+  .rc-conf{ font-size:10.5px; color:var(--mute); }
+  .rc-row{ display:flex; justify-content:space-between; font-size:12px; padding:6px 0; border-top:1px solid #eef1ea; }
+  .rc-row:first-of-type{ border-top:none; }
+  .rc-row span:first-child{ color:var(--mute); }
+  .rc-row span:last-child{ font-weight:700; }
+  .rc-action{ background:var(--wheat); border-radius:9px; padding:10px 12px; font-size:12px; margin-top:8px; line-height:1.5; }
+
+  input[type=file]{ display:none; }
+
+  /* CHAT PANEL */
+  .chat-panel{ background:var(--forest-deep); border:1px solid var(--forest); }
+  .chat-panel .panel-head h3{ color:#fff; }
+  .chat-head-actions{ display:flex; align-items:center; gap:8px; }
+  .voice-toggle{
+    display:flex; align-items:center; gap:5px; background:#1f3f2d; border:1px solid #2c4c3a; color:var(--moss-light);
+    border-radius:20px; padding:6px 11px; font-size:11px; font-weight:700; cursor:pointer;
+  }
+  .voice-toggle.on{ background:var(--amber); color:var(--forest-deep); border-color:var(--amber); }
+  .voice-toggle svg{ width:13px; height:13px; }
+  .chat-log{ flex:1; min-height:220px; max-height:320px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding-right:4px; margin-bottom:12px; }
+  .msg{ max-width:84%; padding:10px 13px; border-radius:12px; font-size:13px; line-height:1.45; }
+  .msg.bot{ background:#1f3f2d; color:#eaf1e6; align-self:flex-start; border-bottom-left-radius:3px; }
+  .msg.user{ background:var(--amber); color:var(--forest-deep); align-self:flex-end; border-bottom-right-radius:3px; font-weight:600; }
+  .chat-suggestions{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
+  .chip{ background:#1f3f2d; color:var(--moss-light); border:1px solid #2c4c3a; border-radius:20px; padding:6px 12px; font-size:11.5px; cursor:pointer; }
+  .chip:hover{ background:#26492f; }
+  .chat-input-row{ display:flex; gap:8px; }
+  .chat-input-row input{
+    flex:1; border:1px solid #2c4c3a; background:#183624; color:#fff; border-radius:10px; padding:11px 13px; font-size:13px;
+  }
+  .chat-input-row input::placeholder{ color:#8ba490; }
+  .mic-btn{ background:#1f3f2d; border:1px solid #2c4c3a; border-radius:10px; width:42px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
+  .mic-btn svg{ width:16px; height:16px; color:var(--moss-light); }
+  .mic-btn.listening{ background:var(--danger); border-color:var(--danger); animation:pulse 1s ease-in-out infinite; }
+  .mic-btn.listening svg{ color:#fff; }
+  @keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:0.55; } }
+  .chat-send{ background:var(--amber); border:none; border-radius:10px; width:42px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
+  .chat-send svg{ width:17px; height:17px; color:var(--forest-deep); }
+  .chat-note{ font-size:10.5px; color:#7f9a86; margin-top:9px; line-height:1.5; }
+  .voice-note{ font-size:10.5px; color:var(--moss-light); margin-top:8px; }
+
+  /* FEATURES */
+  .features{ background:var(--wheat); }
+  .feat-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:40px; }
+  .feat-card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:24px 22px; }
+  .feat-icon{ width:42px; height:42px; border-radius:11px; background:var(--forest); display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
+  .feat-icon svg{ width:20px; height:20px; color:var(--amber); }
+  .feat-card h3{ font-size:15.5px; margin-bottom:8px; }
+  .feat-card p{ font-size:13px; color:var(--mute); }
+
+  /* GUIDE */
+  .guide-section{ background:#fff; border-top:1px solid var(--line); }
+  .crop-tabs{ display:flex; flex-wrap:wrap; gap:8px; margin:34px 0 24px; }
+  .crop-tab{
+    background:var(--wheat); border:1px solid var(--line); border-radius:20px; padding:9px 16px; font-size:12.5px;
+    font-weight:700; cursor:pointer; color:var(--ink);
+  }
+  .crop-tab.active{ background:var(--forest); color:#fff; border-color:var(--forest); }
+  .guide-cols{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+  .guide-block{ background:var(--wheat); border-radius:12px; padding:16px 18px; }
+  .gb-head{ display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+  .gb-head svg{ width:17px; height:17px; color:var(--forest); }
+  .gb-head.danger svg{ color:var(--danger); }
+  .gb-head.amber svg{ color:var(--amber-deep); }
+  .gb-title{ font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--ink); }
+  .gb-text{ font-size:12.5px; color:var(--mute); line-height:1.55; }
+  .gb-item{ padding:7px 0; border-top:1px solid #e8ebe3; }
+  .gb-item:first-of-type{ border-top:none; }
+  .gb-item .name{ font-size:12.5px; font-weight:700; color:var(--ink); }
+  .gb-item .note{ font-size:12px; color:var(--mute); margin-top:2px; line-height:1.45; }
+
+  /* FOOTER */
+  footer{ background:var(--forest-deep); padding:50px 0 30px; color:var(--moss-light); }
+  .footer-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:24px; margin-bottom:30px; }
+  footer h4{ color:#fff; font-family:Cambria, Georgia, serif; font-size:16px; margin-bottom:6px; }
+  footer p{ font-size:12.5px; max-width:340px; }
+  .foot-bottom{ border-top:1px solid #24473a; padding-top:18px; font-size:11.5px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+
+
+  /* SIH LIVE FIELD LINK */
+  .live-field-panel{background:var(--forest-deep);border:1px solid var(--forest);border-radius:16px;padding:18px 20px;margin:18px 0 30px;color:#fff;}
+  .live-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;}
+  .live-head h3{color:#fff;font-size:17px;}
+  .live-kicker{color:var(--amber);font-size:10px;font-weight:800;letter-spacing:1px;margin-bottom:3px;}
+  .live-state{font-size:10px;font-weight:800;color:var(--moss-light);background:#1f3f2d;border:1px solid #2c4c3a;border-radius:20px;padding:6px 10px;white-space:nowrap;}
+  .live-state.connected{background:var(--amber);color:var(--forest-deep);border-color:var(--amber);}
+  .live-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
+  .live-metric{background:rgba(255,255,255,.07);border-radius:10px;padding:10px;}
+  .live-metric span{display:block;color:var(--moss-light);font-size:10px;margin-bottom:3px;}
+  .live-metric strong{font-size:14px;color:#fff;}
+  .live-foot{margin-top:10px;color:#91a998;font-size:10.5px;}
+  .live-empty{background:rgba(255,255,255,.06);border-radius:10px;padding:13px;color:var(--moss-light);font-size:12px;}
+  @media (max-width:880px){.live-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:880px){
+    nav.links{ display:none; }
+    .hero .wrap{ grid-template-columns:1fr; }
+    .hero h1{ font-size:32px; }
+    .steps-grid{ grid-template-columns:1fr 1fr; }
+    .demo-grid{ grid-template-columns:1fr; }
+    .feat-grid{ grid-template-columns:1fr; }
+    .guide-cols{ grid-template-columns:1fr; }
+    .stats-strip .wrap{ justify-content:flex-start; }
+    section{ padding:56px 0; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-row">
+    <div class="brand">
+      <span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2s7 8 7 13a7 7 0 1 1-14 0c0-5 7-13 7-13z"/></svg></span>
+      <div>
+        <div class="brand-name">Khet Drishti</div>
+        <div class="brand-sub" data-i18n="brandSub">Problem statement 26180 · Qualcomm Inc</div>
+      </div>
+    </div>
+    <nav class="links">
+      <a href="#how-it-works" data-i18n="navHow">How it works</a>
+      <a href="#try-it" data-i18n="navTry">Try the demo</a>
+      <a href="#features" data-i18n="navFeatures">Features</a>
+      <a href="#guide" data-i18n="navGuide">Crop guide</a>
+    </nav>
+    <div class="nav-right">
+      <div class="lang-switch">
+        <button id="btnEn" onclick="setLang('en')">EN</button>
+        <button id="btnHi" onclick="setLang('hi')">हिन्दी</button>
+      </div>
+      <a class="nav-cta" href="#try-it" data-i18n="navCta">Try the demo</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <p class="kicker" data-i18n="heroKicker">FIELD INTELLIGENCE, OFFLINE-FIRST</p>
+      <h1 data-i18n="heroTitle">See what's happening in your field before it costs you the season.</h1>
+      <p class="lede" data-i18n="heroLede">Khet Drishti reads a leaf, a soil reading, or a spoken question, and turns it into a plain-language answer — a diagnosis, an irrigation call, or a warning — in the language a farmer already speaks.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#try-it" data-i18n="heroBtnPrimary">Upload a leaf photo</a>
+        <a class="btn-secondary" href="#how-it-works" data-i18n="heroBtnSecondary">See how it works</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hv-row">
+        <div>
+          <div class="hv-label" data-i18n="hvLabel">Field health score</div>
+          <div class="hv-score">78<span>/100</span></div>
+          <div class="hv-trend" data-i18n="hvTrend">▲ 4 pts vs last week</div>
+        </div>
+      </div>
+      <div class="hv-stats">
+        <div class="hv-stat"><div class="n">18%</div><div class="l" data-i18n="hvStat1">Water saved</div></div>
+        <div class="hv-stat"><div class="n">₹4,200</div><div class="l" data-i18n="hvStat2">Cost saved / season</div></div>
+        <div class="hv-stat"><div class="n">92%</div><div class="l" data-i18n="hvStat3">Model accuracy</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats-strip">
+  <div class="wrap">
+    <div class="ss-item"><div class="n">42</div><div class="l" data-i18n="ss1">Acres monitored</div></div>
+    <div class="ss-item"><div class="n">8</div><div class="l" data-i18n="ss2">Crops covered</div></div>
+    <div class="ss-item"><div class="n">2</div><div class="l" data-i18n="ss3">Languages, more on the way</div></div>
+    <div class="ss-item"><div class="n">100%</div><div class="l" data-i18n="ss4">Runs on-device, no signal needed</div></div>
+  </div>
+</div>
+
+<section class="steps" id="how-it-works">
+  <div class="wrap">
+    <p class="kicker" data-i18n="stepsKicker">THE FULL PROCESS</p>
+    <h2 data-i18n="stepsTitle">From a photo on your phone to a decision in the field</h2>
+    <p class="lede" data-i18n="stepsLede">Four steps, no internet required for the scan itself. Here's exactly what happens to a photo you upload, and what the assistant does with a question you type or speak.</p>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3 data-i18n="step1Title">Take or upload a photo</h3>
+        <p data-i18n="step1Text">Pick a single affected leaf, fill the frame, and shoot in daylight against a plain background. Tap the upload area below, or use your phone's camera app — JPG or PNG, under 10MB.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3 data-i18n="step2Title">On-device analysis</h3>
+        <p data-i18n="step2Text">The photo never has to leave your phone. A lightweight color-and-texture model scans the leaf for lesions, discoloration, and healthy tissue in under two seconds.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3 data-i18n="step3Title">Match against the crop database</h3>
+        <p data-i18n="step3Text">The result is checked against known pest and disease signatures for the crop you selected, and ranked by how closely it matches.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <h3 data-i18n="step4Title">Ask the assistant a follow-up</h3>
+        <p data-i18n="step4Text">Not sure what the diagnosis means, or when to irrigate? Type or speak your question to the assistant — it answers using the same crop data, in your language.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="live-field-panel" id="sihLiveField">
+  <div class="wrap">
+    <div class="live-head">
+      <div>
+        <div class="live-kicker">SIH SMART FARMING · LIVE FIELD LINK</div>
+        <h3>Live Field Context</h3>
+      </div>
+      <div class="live-state" id="liveMqttState">CONNECTING…</div>
+    </div>
+    <div id="liveFieldContext">
+      <div class="live-empty">Connecting to the SIH gateway…</div>
+    </div>
+  </div>
+</section>
+
+<section class="demo" id="try-it">
+  <div class="wrap">
+    <p class="kicker" data-i18n="demoKicker">TRY IT NOW</p>
+    <h2 data-i18n="demoTitle">Upload a leaf photo, then ask the assistant about it</h2>
+    <p class="lede" data-i18n="demoLede">This is a working demo. Choose your crop once — both panels use it — then upload a photo on the left, or ask a question on the right, by typing or speaking.</p>
+
+    <div class="panel-head" style="margin-top:30px;">
+      <h3 style="color:var(--ink)" data-i18n="demoCropLabel">Crop for this demo</h3>
+      <select class="crop-select" id="globalCropSelect"></select>
+    </div>
+
+    <div class="demo-grid">
+      <div class="panel">
+        <div class="panel-head"><h3 data-i18n="panel1Title">1 · Scan a leaf</h3></div>
+        <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
+          <img id="previewImg" alt="Uploaded leaf" />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div class="dz-title" data-i18n="dzTitle">Drag a leaf photo here, or click to upload</div>
+          <div class="dz-sub" data-i18n="dzSub">JPG or PNG, under 10MB. You can also use your phone's camera app and upload the shot.</div>
+          <div class="dz-overlay" id="dzOverlay"></div>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" onchange="handleFile(event)">
+        <div class="scan-progress" id="scanProgress"><span class="spinner"></span><span data-i18n="scanning">Analyzing on-device…</span></div>
+        <div class="result-card" id="resultCard"></div>
+      </div>
+
+      <div class="panel chat-panel">
+        <div class="panel-head">
+          <h3 data-i18n="panel2Title">2 · Ask the assistant</h3>
+          <div class="chat-head-actions">
+            <button class="voice-toggle on" id="voiceToggle" onclick="toggleVoiceOut()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+              <span id="voiceToggleLabel" data-i18n="voiceOn">Voice on</span>
+            </button>
+          </div>
+        </div>
+        <div class="chat-log" id="chatLog"></div>
+        <div class="chat-suggestions" id="chatChips"></div>
+        <div class="chat-input-row">
+          <input type="text" id="chatInput" placeholder="Ask about irrigation, pests, fertilizer…" onkeydown="if(event.key==='Enter') sendChat()">
+          <button class="mic-btn" id="micBtn" onclick="toggleMic()" aria-label="Speak">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </button>
+          <button class="chat-send" onclick="sendChat()" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+        </div>
+        <p class="voice-note" id="voiceNote" data-i18n="voiceNote">Tap the mic to speak your question. The assistant's voice (female, Hindi/English) replies out loud — toggle "Voice on" to mute it.</p>
+        <p class="chat-note" data-i18n="chatNote">This demo assistant answers by matching your question against the crop database below, entirely in the browser. To power it with a live language model instead, connect this input to a backend endpoint that calls the model API on your server — the front end here is already wired for it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="wrap">
+    <p class="kicker" data-i18n="featKicker">EVERYTHING ELSE IN THE APP</p>
+    <h2 data-i18n="featTitle">Built around the four calls a farmer makes every week</h2>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2s7 8 7 13a7 7 0 1 1-14 0c0-5 7-13 7-13z"/></svg></span>
+        <h3 data-i18n="feat1Title">Irrigation advisor</h3>
+        <p data-i18n="feat1Text">Soil moisture, soil temperature, and the week's rain forecast combine into one plain instruction: water now, or wait.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M9 18a3 3 0 0 0 6 0"/></svg></span>
+        <h3 data-i18n="feat2Title">Early alerts</h3>
+        <p data-i18n="feat2Text">Pest signatures, flood risk, and heat stress are flagged as soon as they cross a threshold for your plot, not after the damage shows.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="20" x2="4" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="20" y1="20" x2="20" y2="14"/></svg></span>
+        <h3 data-i18n="feat3Title">Season dashboard</h3>
+        <p data-i18n="feat3Text">Water saved, cost saved, and field health tracked week over week, so the next season's decisions start from evidence.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="guide-section" id="guide">
+  <div class="wrap">
+    <p class="kicker" data-i18n="guideKicker">CROP GUIDE</p>
+    <h2 data-i18n="guideTitle">Temperature, moisture, fertilizer, pests and disease — by crop</h2>
+    <div class="crop-tabs" id="cropTabs"></div>
+    <div class="guide-cols" id="guideCols"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div>
+        <h4>Khet Drishti</h4>
+        <p data-i18n="footAbout">A field-intelligence prototype built for problem statement 26180. Runs offline-first, in the farmer's own language.</p>
+      </div>
+      <div>
+        <h4 data-i18n="footBuildTitle">This build</h4>
+        <p data-i18n="footBuildText">Photo scanning uses an on-device color/texture heuristic as a stand-in for a trained disease-classification model. The assistant uses rule-based matching as a stand-in for a hosted language model, and browser speech APIs for voice in/out.</p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span data-i18n="footProto">Prototype for demonstration purposes.</span>
+      <span data-i18n="brandSub">Problem statement 26180 · Qualcomm Inc</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<script>
+/* ============ SIH LIVE FIELD LINK ============ */
+var SIH_MQTT_URL = 'wss://test.mosquitto.org:8081/mqtt';
+var SIH_DASHBOARD_TOPIC = 'sih2026/farm/dashboard';
+var SIH_CROP_HEALTH_TOPIC = 'sih2026/farm/crop-health';
+var liveFieldData = {};
+var sihMqttClient = null;
+var sihMqttConnected = false;
+
+function sihEsc(v){
+  return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function formatLive(v, suffix){
+  if (v === undefined || v === null || v === '' || isNaN(Number(v))) return '—';
+  return Number(v).toFixed(1) + (suffix || '');
+}
+
+function renderLiveFieldContext(){
+  var box=document.getElementById('liveFieldContext');
+  var state=document.getElementById('liveMqttState');
+  if(!box) return;
+  var d=liveFieldData || {};
+  var has=Object.keys(d).length>0;
+  if(state){ state.textContent=sihMqttConnected ? 'LIVE · MQTT CONNECTED' : 'CONNECTING…'; state.className=sihMqttConnected ? 'live-state connected' : 'live-state'; }
+  if(!has){
+    box.innerHTML='<div class="live-empty">Waiting for live field readings from the SIH gateway…</div>';
+    return;
+  }
+  var cam=d.camera && d.camera!=='NONE' ? d.camera : 'NORMAL';
+  box.innerHTML=
+    '<div class="live-grid">'+
+      '<div class="live-metric"><span>Zone 1 soil</span><strong>'+formatLive(d.n1_m,'%')+'</strong></div>'+
+      '<div class="live-metric"><span>Zone 2 soil</span><strong>'+formatLive(d.n2_m,'%')+'</strong></div>'+
+      '<div class="live-metric"><span>Zone 3 soil</span><strong>'+formatLive(d.n3_m,'%')+'</strong></div>'+
+      '<div class="live-metric"><span>Temperature Z3</span><strong>'+formatLive(d.n3_t,'°C')+'</strong></div>'+
+      '<div class="live-metric"><span>Humidity Z3</span><strong>'+formatLive(d.n3_h,'%')+'</strong></div>'+
+      '<div class="live-metric"><span>Camera</span><strong>'+sihEsc(cam)+'</strong></div>'+
+    '</div>'+
+    '<div class="live-foot">Gateway status: '+sihEsc(d.gateway || d.gateway_status || 'ONLINE')+' · Last update: '+new Date().toLocaleTimeString()+'</div>';
+}
+
+function connectSIHMqtt(){
+  if(typeof mqtt==='undefined') return;
+  try{
+    sihMqttClient=mqtt.connect(SIH_MQTT_URL,{
+      clean:true,
+      reconnectPeriod:3000,
+      connectTimeout:8000,
+      clientId:'khet-drishti-'+Math.random().toString(16).slice(2)
+    });
+    sihMqttClient.on('connect',function(){
+      sihMqttConnected=true;
+      sihMqttClient.subscribe(SIH_DASHBOARD_TOPIC);
+      renderLiveFieldContext();
+    });
+    sihMqttClient.on('reconnect',function(){ sihMqttConnected=false; renderLiveFieldContext(); });
+    sihMqttClient.on('close',function(){ sihMqttConnected=false; renderLiveFieldContext(); });
+    sihMqttClient.on('error',function(){ sihMqttConnected=false; renderLiveFieldContext(); });
+    sihMqttClient.on('message',function(topic,payload){
+      if(topic!==SIH_DASHBOARD_TOPIC) return;
+      try{
+        liveFieldData=JSON.parse(payload.toString());
+        renderLiveFieldContext();
+      }catch(e){}
+    });
+  }catch(e){}
+}
+
+function publishCropHealthResult(analysis,cropId,title,confidence){
+  if(!sihMqttClient || !sihMqttConnected) return;
+  var payload={
+    source:'KHET_DRISHTI',
+    crop:cropId,
+    crop_name:(cropData.en[cropId]||{}).name || cropId,
+    result:title,
+    category:analysis.category,
+    confidence:Number(confidence),
+    affected_area_percent:Math.round(analysis.ratio*100),
+    field:{
+      n1_m:liveFieldData.n1_m ?? null, n2_m:liveFieldData.n2_m ?? null, n3_m:liveFieldData.n3_m ?? null,
+      n3_t:liveFieldData.n3_t ?? null, n3_h:liveFieldData.n3_h ?? null, camera:liveFieldData.camera ?? null
+    },
+    timestamp:new Date().toISOString()
+  };
+  sihMqttClient.publish(SIH_CROP_HEALTH_TOPIC,JSON.stringify(payload));
+}
+
+connectSIHMqtt();
+
+/* ============ i18n ============ */
+var currentLang = 'en';
+
+var uiText = {
+  en: {
+    brandSub:'Problem statement 26180 · Qualcomm Inc',
+    navHow:'How it works', navTry:'Try the demo', navFeatures:'Features', navGuide:'Crop guide', navCta:'Try the demo',
+    heroKicker:'FIELD INTELLIGENCE, OFFLINE-FIRST',
+    heroTitle:"See what's happening in your field before it costs you the season.",
+    heroLede:'Khet Drishti reads a leaf, a soil reading, or a spoken question, and turns it into a plain-language answer — a diagnosis, an irrigation call, or a warning — in the language a farmer already speaks.',
+    heroBtnPrimary:'Upload a leaf photo', heroBtnSecondary:'See how it works',
+    hvLabel:'Field health score', hvTrend:'▲ 4 pts vs last week',
+    hvStat1:'Water saved', hvStat2:'Cost saved / season', hvStat3:'Model accuracy',
+    ss1:'Acres monitored', ss2:'Crops covered', ss3:'Languages, more on the way', ss4:'Runs on-device, no signal needed',
+    stepsKicker:'THE FULL PROCESS', stepsTitle:'From a photo on your phone to a decision in the field',
+    stepsLede:"Four steps, no internet required for the scan itself. Here's exactly what happens to a photo you upload, and what the assistant does with a question you type or speak.",
+    step1Title:'Take or upload a photo',
+    step1Text:"Pick a single affected leaf, fill the frame, and shoot in daylight against a plain background. Tap the upload area below, or use your phone's camera app — JPG or PNG, under 10MB.",
+    step2Title:'On-device analysis',
+    step2Text:'The photo never has to leave your phone. A lightweight color-and-texture model scans the leaf for lesions, discoloration, and healthy tissue in under two seconds.',
+    step3Title:'Match against the crop database',
+    step3Text:'The result is checked against known pest and disease signatures for the crop you selected, and ranked by how closely it matches.',
+    step4Title:'Ask the assistant a follow-up',
+    step4Text:'Not sure what the diagnosis means, or when to irrigate? Type or speak your question to the assistant — it answers using the same crop data, in your language.',
+    demoKicker:'TRY IT NOW', demoTitle:'Upload a leaf photo, then ask the assistant about it',
+    demoLede:'This is a working demo. Choose your crop once — both panels use it — then upload a photo on the left, or ask a question on the right, by typing or speaking.',
+    demoCropLabel:'Crop for this demo',
+    panel1Title:'1 · Scan a leaf', panel2Title:'2 · Ask the assistant',
+    dzTitle:'Drag a leaf photo here, or click to upload',
+    dzSub:"JPG or PNG, under 10MB. You can also use your phone's camera app and upload the shot.",
+    scanning:'Analyzing on-device…',
+    voiceOn:'Voice on', voiceOff:'Voice off',
+    voiceNote:'Tap the mic to speak your question. The assistant\'s voice (female, Hindi/English) replies out loud — toggle "Voice on" to mute it.',
+    chatNote:'This demo assistant answers by matching your question against the crop database below, entirely in the browser. To power it with a live language model instead, connect this input to a backend endpoint that calls the model API on your server — the front end here is already wired for it.',
+    chatPlaceholder:'Ask about irrigation, pests, fertilizer…',
+    greeting:"Namaste! I'm the Khet Drishti assistant. Pick a crop above, then ask me about irrigation, pests, fertilizer, or upload a leaf photo on the left and I'll help interpret it.",
+    scanComplete:'Scan complete for {crop}: {title} ({conf}% confidence). Ask me what this means, or how to treat it.',
+    fallback:'I can answer questions about irrigation, fertilizer, pests, diseases, temperature, weather, and alerts for {crop}. Try one of the suggestions above, or ask a specific question.',
+    weatherAns:'Current reading: 33°C, 64% humidity, 20% chance of rain today, with rain expected Thursday.',
+    scanHelp:'Upload a clear, well-lit photo of a single leaf in the panel on the left. The assistant analyzes it on-device and checks it against the {crop} disease database.',
+    fertAns:'Fertilizer plan for {crop}: {data}',
+    pestAns:'Main pests to watch for {crop}: {data}',
+    diseaseAns:'Common diseases for {crop}: {data}',
+    tempAns:'Temperature guidance for {crop}: {data}',
+    irrigAns:'For {crop}: {data}{live} Use the live field reading above together with crop stage before deciding whether to irrigate.',
+    chips:['Irrigation schedule','Pests for this crop','Fertilizer dose','Any alerts?'],
+    featKicker:'EVERYTHING ELSE IN THE APP', featTitle:'Built around the four calls a farmer makes every week',
+    feat1Title:'Irrigation advisor', feat1Text:"Soil moisture, soil temperature, and the week's rain forecast combine into one plain instruction: water now, or wait.",
+    feat2Title:'Early alerts', feat2Text:'Pest signatures, flood risk, and heat stress are flagged as soon as they cross a threshold for your plot, not after the damage shows.',
+    feat3Title:'Season dashboard', feat3Text:"Water saved, cost saved, and field health tracked week over week, so the next season's decisions start from evidence.",
+    guideKicker:'CROP GUIDE', guideTitle:'Temperature, moisture, fertilizer, pests and disease — by crop',
+    footAbout:"A field-intelligence prototype built for problem statement 26180. Runs offline-first, in the farmer's own language.",
+    footBuildTitle:'This build',
+    footBuildText:'Photo scanning uses an on-device color/texture heuristic as a stand-in for a trained disease-classification model. The assistant uses rule-based matching as a stand-in for a hosted language model, and browser speech APIs for voice in/out.',
+    footProto:'Prototype for demonstration purposes.',
+    guideTemp:'Temperature', guideMoisture:'Moisture', guideFert:'Fertilizer', guidePests:'Pests', guideDiseases:'Diseases',
+    compareLabel:'Compared against {crop} database', closestMatch:'closest match',
+    resultCrop:'Crop', resultArea:'Affected area (est.)', resultMethod:'Method', resultMethodVal:'Canvas pixel heuristic (demo)',
+    healthyTitle:'No major issue detected', healthyAction:'Leaf coloration looks within a healthy range for {crop}. Re-scan in a few days to keep tracking.',
+    lesionTitle:'Dark lesion pattern detected', lesionAction:'Dark spotting visible on the leaf surface — consistent with a fungal leaf disease. Isolate the plant and consult local extension services.',
+    discolorTitle:'Yellow-brown discoloration detected', discolorAction:'Yellowing/browning can indicate early disease or a nitrogen/potassium deficiency. Cross-check against the Fertilizer section of the crop guide before treating.',
+    confidenceLabel:'Confidence {conf}% · on-device color/texture analysis',
+    alertsLabel:['Pest activity rising — Leaf-folder signature detected, Plot 3 — scout NE corner','Flood-risk alert — Rainfall + soil saturation crossing district threshold','Heat-stress warning — Canopy temperature trending +4°C above safe range','Irrigate now — Soil moisture below crop-stage threshold at Plot 3']
+  },
+  hi: {
+    brandSub:'समस्या विवरण 26180 · क्वालकॉम इंक',
+    navHow:'यह कैसे काम करता है', navTry:'डेमो आज़माएं', navFeatures:'विशेषताएं', navGuide:'फ़सल गाइड', navCta:'डेमो आज़माएं',
+    heroKicker:'खेत की जानकारी, बिना इंटरनेट के',
+    heroTitle:'मौसम बिगड़ने से पहले जानें आपके खेत में क्या हो रहा है।',
+    heroLede:'खेत दृष्टि एक पत्ती, मिट्टी की रीडिंग, या बोला गया सवाल पढ़कर उसे सरल भाषा में जवाब देती है — रोग की पहचान, सिंचाई की सलाह, या चेतावनी — किसान की अपनी भाषा में।',
+    heroBtnPrimary:'पत्ती की फोटो अपलोड करें', heroBtnSecondary:'यह कैसे काम करता है देखें',
+    hvLabel:'खेत स्वास्थ्य स्कोर', hvTrend:'▲ पिछले सप्ताह से 4 अंक अधिक',
+    hvStat1:'पानी की बचत', hvStat2:'सीज़न की लागत बचत', hvStat3:'मॉडल सटीकता',
+    ss1:'एकड़ की निगरानी', ss2:'शामिल फ़सलें', ss3:'भाषाएं, और जल्द आएंगी', ss4:'डिवाइस पर चलता है, सिग्नल की ज़रूरत नहीं',
+    stepsKicker:'पूरी प्रक्रिया', stepsTitle:'फोन की फोटो से खेत के फैसले तक',
+    stepsLede:'चार चरण, स्कैन के लिए इंटरनेट की ज़रूरत नहीं। यहां बताया गया है कि आपकी अपलोड की गई फोटो का क्या होता है, और आपके टाइप या बोले गए सवाल पर सहायक क्या करता है।',
+    step1Title:'फोटो लें या अपलोड करें',
+    step1Text:'एक प्रभावित पत्ती चुनें, फ्रेम में भरें, और दिन की रोशनी में सादे background पर फोटो लें। नीचे अपलोड क्षेत्र पर टैप करें, या अपने फोन के कैमरा ऐप का इस्तेमाल करें — JPG या PNG, 10MB से कम।',
+    step2Title:'डिवाइस पर विश्लेषण',
+    step2Text:'फोटो आपके फोन से बाहर नहीं जाती। एक हल्का रंग-और-बनावट मॉडल दो सेकंड से भी कम समय में पत्ती पर घाव, रंग बदलाव, और स्वस्थ ऊतक की जांच करता है।',
+    step3Title:'फ़सल डेटाबेस से मिलान',
+    step3Text:'आपके चुने गए फ़सल के लिए जाने-पहचाने कीट और रोग संकेतों से परिणाम की जांच की जाती है, और मिलान की निकटता के अनुसार क्रम दिया जाता है।',
+    step4Title:'सहायक से आगे पूछें',
+    step4Text:'निदान का मतलब समझ नहीं आया, या सिंचाई कब करें? सहायक से टाइप करके या बोलकर पूछें — यह उसी फ़सल डेटा का इस्तेमाल करके आपकी भाषा में जवाब देता है।',
+    demoKicker:'अभी आज़माएं', demoTitle:'पत्ती की फोटो अपलोड करें, फिर सहायक से पूछें',
+    demoLede:'यह एक कार्यशील डेमो है। अपनी फ़सल एक बार चुनें — दोनों पैनल उसी का इस्तेमाल करते हैं — फिर बाईं ओर फोटो अपलोड करें, या दाईं ओर टाइप या बोलकर सवाल पूछें।',
+    demoCropLabel:'इस डेमो के लिए फ़सल',
+    panel1Title:'1 · पत्ती स्कैन करें', panel2Title:'2 · सहायक से पूछें',
+    dzTitle:'यहां पत्ती की फोटो खींचें, या अपलोड करने के लिए क्लिक करें',
+    dzSub:'JPG या PNG, 10MB से कम। आप अपने फोन के कैमरा ऐप का भी इस्तेमाल कर सकते हैं और फोटो अपलोड कर सकते हैं।',
+    scanning:'डिवाइस पर विश्लेषण हो रहा है…',
+    voiceOn:'आवाज़ चालू', voiceOff:'आवाज़ बंद',
+    voiceNote:'अपना सवाल बोलने के लिए माइक पर टैप करें। सहायक की आवाज़ (महिला, हिंदी/अंग्रेज़ी) जवाब बोलकर देती है — इसे बंद करने के लिए "आवाज़ चालू" बटन दबाएं।',
+    chatNote:'यह डेमो सहायक आपके सवाल का मिलान नीचे दिए गए फ़सल डेटाबेस से करता है, पूरी तरह ब्राउज़र में। इसे लाइव भाषा मॉडल से जोड़ने के लिए, इस इनपुट को अपने सर्वर पर मॉडल API बुलाने वाले बैकएंड एंडपॉइंट से जोड़ें — यहां का फ्रंट एंड पहले से इसके लिए तैयार है।',
+    chatPlaceholder:'सिंचाई, कीट, उर्वरक के बारे में पूछें…',
+    greeting:'नमस्ते! मैं खेत दृष्टि सहायक हूं। ऊपर एक फ़सल चुनें, फिर मुझसे सिंचाई, कीट, उर्वरक के बारे में पूछें, या बाईं ओर पत्ती की फोटो अपलोड करें और मैं उसे समझने में मदद करूंगा।',
+    scanComplete:'{crop} के लिए स्कैन पूरा हुआ: {title} ({conf}% भरोसा)। मुझसे पूछें इसका क्या मतलब है, या इसका इलाज कैसे करें।',
+    fallback:'मैं {crop} के लिए सिंचाई, उर्वरक, कीट, रोग, तापमान, मौसम, और अलर्ट के बारे में सवालों के जवाब दे सकता हूं। ऊपर दिए सुझावों में से कोई आज़माएं, या कोई खास सवाल पूछें।',
+    weatherAns:'फिलहाल: 33°C, 64% नमी, आज बारिश की 20% संभावना, गुरुवार को बारिश होने की उम्मीद है।',
+    scanHelp:'बाईं ओर के पैनल में एक साफ, अच्छी रोशनी वाली पत्ती की फोटो अपलोड करें। सहायक इसे डिवाइस पर ही विश्लेषण करता है और {crop} रोग डेटाबेस से जांचता है।',
+    fertAns:'{crop} के लिए उर्वरक योजना: {data}',
+    pestAns:'{crop} के लिए मुख्य कीट जिन पर ध्यान दें: {data}',
+    diseaseAns:'{crop} के सामान्य रोग: {data}',
+    tempAns:'{crop} के लिए तापमान मार्गदर्शन: {data}',
+    irrigAns:'{crop} के लिए: {data}{live} सिंचाई का फैसला ऊपर दिए लाइव खेत डेटा और फसल की अवस्था को देखकर करें।',
+    chips:['सिंचाई अनुसूची','इस फ़सल के कीट','उर्वरक की मात्रा','कोई अलर्ट?'],
+    featKicker:'ऐप में बाकी सब कुछ', featTitle:'किसान के हर हफ्ते के चार मुख्य सवालों पर आधारित',
+    feat1Title:'सिंचाई सलाहकार', feat1Text:'मिट्टी की नमी, मिट्टी का तापमान, और सप्ताह के बारिश पूर्वानुमान को मिलाकर एक सीधी सलाह दी जाती है: अभी पानी दें, या रुकें।',
+    feat2Title:'शीघ्र अलर्ट', feat2Text:'कीट संकेत, बाढ़ का खतरा, और गर्मी का तनाव आपके प्लॉट के लिए सीमा पार करते ही चिन्हित हो जाते हैं, नुकसान दिखने के बाद नहीं।',
+    feat3Title:'सीज़न डैशबोर्ड', feat3Text:'पानी की बचत, लागत बचत, और खेत स्वास्थ्य हर हफ्ते ट्रैक किया जाता है, ताकि अगले सीज़न के फैसले सबूत से शुरू हों।',
+    guideKicker:'फ़सल गाइड', guideTitle:'तापमान, नमी, उर्वरक, कीट और रोग — फ़सल के अनुसार',
+    footAbout:'समस्या विवरण 26180 के लिए बनाया गया एक खेत-जानकारी प्रोटोटाइप। बिना इंटरनेट के, किसान की अपनी भाषा में चलता है।',
+    footBuildTitle:'यह बिल्ड',
+    footBuildText:'फोटो स्कैनिंग एक प्रशिक्षित रोग-वर्गीकरण मॉडल के स्थान पर डिवाइस पर रंग/बनावट अनुमान का उपयोग करती है। सहायक होस्टेड भाषा मॉडल के स्थान पर नियम-आधारित मिलान का उपयोग करता है, और आवाज़ इनपुट/आउटपुट के लिए ब्राउज़र स्पीच API का उपयोग करता है।',
+    footProto:'यह केवल प्रदर्शन के लिए बनाया गया प्रोटोटाइप है।',
+    guideTemp:'तापमान', guideMoisture:'नमी', guideFert:'उर्वरक', guidePests:'कीट', guideDiseases:'रोग',
+    compareLabel:'{crop} डेटाबेस से तुलना', closestMatch:'सबसे नज़दीकी मिलान',
+    resultCrop:'फ़सल', resultArea:'प्रभावित क्षेत्र (अनुमानित)', resultMethod:'तरीका', resultMethodVal:'कैनवास पिक्सेल अनुमान (डेमो)',
+    healthyTitle:'कोई बड़ी समस्या नहीं मिली', healthyAction:'{crop} के लिए पत्ती का रंग स्वस्थ सीमा में लग रहा है। ट्रैकिंग जारी रखने के लिए कुछ दिनों में फिर से स्कैन करें।',
+    lesionTitle:'गहरे धब्बे का पैटर्न मिला', lesionAction:'पत्ती की सतह पर गहरे धब्बे दिख रहे हैं — यह फंगल पत्ती रोग जैसा लगता है। पौधे को अलग करें और स्थानीय कृषि विस्तार सेवा से सलाह लें।',
+    discolorTitle:'पीला-भूरा रंग बदलाव मिला', discolorAction:'पीलापन/भूरापन शुरुआती रोग या नाइट्रोजन/पोटेशियम की कमी दर्शा सकता है। इलाज से पहले फ़सल गाइड के उर्वरक भाग से जांच करें।',
+    confidenceLabel:'भरोसा {conf}% · डिवाइस पर रंग/बनावट विश्लेषण',
+    alertsLabel:['कीट गतिविधि बढ़ रही है — पत्ती-मोड़क संकेत मिला, प्लॉट 3 — उत्तर-पूर्व कोने की जांच करें','बाढ़ जोखिम अलर्ट — बारिश + मिट्टी की नमी जिला सीमा पार कर रही है','गर्मी तनाव चेतावनी — कैनोपी तापमान सुरक्षित सीमा से +4°C अधिक','अभी सिंचाई करें — प्लॉट 3 में मिट्टी की नमी फ़सल-चरण सीमा से कम है']
+  }
+};
+
+/* ============ crop data (English + Hindi) ============ */
+var cropData = {
+  en: {
+    rice: { name:'Rice', temp:'25–32°C day / 15–20°C night. Flowering is critical: 30–33°C ideal, below 22°C or above 35°C hurts fertilization.',
+      moisture:'Flooded culture. Keep soil at least 80% of field capacity from sowing to tillering, then 70% during ripening.',
+      fert:'80-40-40 kg N-P₂O₅-K₂O/ha (general). Basal: 25–50% N + 100% P + 50% K at sowing. Remaining N split at tillering and panicle initiation.',
+      pests:[ {n:'Rice planthoppers (BPH)', note:'Sap-sucking, causes hopperburn. Avoid excess nitrogen, alternate wetting-drying.'},
+        {n:'Stem borers', note:'Larvae cause deadhearts and whiteheads.'},
+        {n:'Leaffolders', note:'Fold leaves, reduce photosynthesis.'} ],
+      diseases:[ {n:'Rice blast', note:'Up to 100% yield loss. Diamond-shaped leaf lesions.'},
+        {n:'Bacterial leaf blight', note:'Wilting, yellowing, drying of leaves.'},
+        {n:'Sheath blight', note:'Oval greenish-grey lesions on leaf sheaths.'} ] },
+    maize: { name:'Maize', temp:'Optimal ~30°C (26–34°C). Growth slows below 13.5°C, stops above 38°C.',
+      moisture:'Harvest at 20–25% grain moisture; dry to 14–15% for safe storage.',
+      fert:'120:60:60 kg N:P₂O₅:K₂O/ha. Full P+K basal. N split 1/3 sowing, 1/3 knee-height, 1/3 tasseling. FYM 25 t/ha improves soil.',
+      pests:[ {n:'Fall armyworm', note:'Major invasive pest, feeds on leaves and cobs.'},
+        {n:'Grasshoppers', note:'Cause significant defoliation.'},
+        {n:'Stem borers', note:'Tunnel into stalks, weaken plant.'} ],
+      diseases:[ {n:'Leaf blights', note:'Turcicum and Maydis blight cause major losses.'},
+        {n:'Downy mildew', note:'Favored by high humidity, stunts growth.'},
+        {n:'Stalk & ear rots', note:'Fungal/bacterial, produce mycotoxins in grain.'} ] },
+    soybean: { name:'Soybean', temp:'26.5–30°C optimum growth. Soil temp at least 15.5°C for germination.',
+      moisture:'Harvest around 15% grain moisture; dry to 7–8% for long-term storage.',
+      fert:'Fixes 55–75% of its own nitrogen; rarely needs pre-plant N. Apply P & K per soil test before planting; ensure sulphur at seed-filling stage.',
+      pests:[ {n:'Defoliators (bean beetles)', note:'Treat if defoliation exceeds 30% before flowering.'},
+        {n:'Caterpillars', note:'Feed gregariously on leaves; handpick egg masses.'},
+        {n:'Stem fly / girdle beetle', note:'Tunnel into stems causing wilting.'} ],
+      diseases:[ {n:'Rust', note:'Brown pustules on leaves; treat with mancozeb or propiconazole.'},
+        {n:'Pod & Rhizoctonia blight', note:'Rotting of pods; avoid excess nitrogen.'},
+        {n:'Viral mosaic', note:'Spread by whitefly; control the vector, no cure.'} ] },
+    groundnut: { name:'Groundnut', temp:'25–35°C optimum, minimum 18°C. Above 33°C can abort flowers.',
+      moisture:'Needs 500–700 mm rainfall; pegging & pod stage most critical. Dry to 8–10% at harvest.',
+      fert:'Starter N ~20 kg/ha only (legume). 60 kg P₂O₅ + 40 kg K₂O/ha. Gypsum 400–500 kg/ha at pegging for calcium. Sulphur 20–40 kg/ha.',
+      pests:[ {n:'Sucking pests', note:'Aphids, jassids, thrips, whiteflies.'},
+        {n:'White grubs', note:'Larvae feed on roots and pods.'},
+        {n:'Spodoptera & Helicoverpa', note:'Caterpillars that defoliate plants.'} ],
+      diseases:[ {n:'Tikka leaf spot', note:'Most common fungal disease, dark spots.'},
+        {n:'Rust', note:'Orange-brown pustules on leaves.'},
+        {n:'Bud necrosis & aflatoxin', note:'Viral (thrips-spread); aflatoxin linked to drought stress.'} ] },
+    cotton: { name:'Cotton', temp:'25–35°C optimal. Growth slows sharply below 15°C.',
+      moisture:'600–1,200 mm/season. Flowering & boll formation need 75% field capacity — the most sensitive stage.',
+      fert:'Irrigated: 120–150 N, 60–75 P₂O₅, 60–75 K₂O kg/ha. Full P+K basal; N split 3–4 times (sowing, squaring, flowering, boll).',
+      pests:[ {n:'Bollworms', note:'American and Pink bollworm; use pheromone traps.'},
+        {n:'Sucking pests', note:'Aphids, jassids, whiteflies, thrips, plant bugs.'} ],
+      diseases:[ {n:'Bacterial blight', note:'Use resistant varieties, crop rotation.'},
+        {n:'Fusarium/Verticillium wilt', note:'Treat seed with Carbendazim or Trichoderma.'},
+        {n:'Leaf spots', note:'Alternaria, Cercospora — foliar copper/mancozeb sprays.'} ] },
+    millets: { name:'Millets', temp:'Germination needs min 8–10°C soil. Growth optimum 26–29°C.',
+      moisture:'Resilient to low rainfall, 500–1000 mm/year needed. Dry to 10–12% for safe storage.',
+      fert:'FYM 12.5 t/ha + sunhemp for finger millet. Pearl millet: Urea 65kg + SSP 167kg + MOP 50kg/ha per soil test.',
+      pests:[ {n:'Pink stem borer & leaf folder', note:'Key pests along with aphids, cutworm, leafhopper.'},
+        {n:'Grasshopper', note:'Defoliates young plants.'} ],
+      diseases:[ {n:'Blast', note:'Most serious for finger millet, up to 80% loss.'},
+        {n:'Downy mildew', note:'Treat pearl millet seed with metalaxyl before sowing.'},
+        {n:'Cercospora leaf spot & smut', note:'Also common; crop rotation helps.'} ] },
+    gram: { name:'Gram / pulses', temp:'8–22°C for general growth. Tolerates 37.5–40°C day at maturity.',
+      moisture:'Needs only 1–2 irrigations (40–45 & 60–65 days after sowing). Store at 8.88–11% moisture.',
+      fert:'Basal: 50 kg DAP + 20 kg MOP/acre. Seed inoculation with Rhizobium biofertilizer. 2% urea foliar spray at 90 & 110 days.',
+      pests:[ {n:'Gram pod borer', note:'Most serious pest. Use Azadirachtin, HaNPV, or Bt biopesticides.'} ],
+      diseases:[ {n:'Fusarium wilt', note:'Soil-borne. Trichoderma harzianum is an effective bioagent.'} ] },
+    sugarcane: { name:'Sugarcane', temp:'28–35°C for germination & growth. Cooler nights 12–20°C aid sugar accumulation.',
+      moisture:'Needs 1,500–2,500 mm water. Most sensitive stages: germination, tillering, grand growth.',
+      fert:'250–300 kg N, 80–100 kg P₂O₅, 120–150 kg K₂O/ha (plant crop). Ratoon needs 20–30% more N. Split N into 3–4 doses.',
+      pests:[ {n:'Borers', note:'Shoot, top, stalk, internode borers cause dead hearts.'},
+        {n:'Sap-suckers', note:'Black bug, thrips — severe in hot dry weather.'},
+        {n:'Armyworm', note:'Feeds on leaves, common in ratoon crops.'} ],
+      diseases:[ {n:'Red rot', note:'Major threat in India — internal reddening of stalk.'},
+        {n:'Wilt & sett rot', note:'Stunting, yellowing, rotting of planting material.'},
+        {n:'Grassy shoot & Pokkah boeng', note:'Phytoplasma / fungal — malformed, twisted leaves.'} ] }
+  },
+  hi: {
+    rice: { name:'धान', temp:'दिन में 25–32°C / रात में 15–20°C। फूल आने का समय अहम: 30–33°C आदर्श, 22°C से कम या 35°C से अधिक निषेचन को नुकसान पहुंचाता है।',
+      moisture:'जलमग्न खेती। बुवाई से कल्ले निकलने तक मिट्टी को कम से कम 80% क्षेत्र क्षमता पर रखें, फिर पकने के दौरान 70%।',
+      fert:'80-40-40 किग्रा N-P₂O₅-K₂O/हेक्टेयर (सामान्य)। बेसल: बुवाई पर 25–50% N + 100% P + 50% K। बाकी N कल्ले निकलने और बाली आने पर।',
+      pests:[ {n:'धान के फुदका (BPH)', note:'रस चूसते हैं, हॉपरबर्न करते हैं। अधिक नाइट्रोजन से बचें, बारी-बारी गीला-सूखा रखें।'},
+        {n:'तना छेदक', note:'लार्वा डेडहार्ट और व्हाइटहेड बनाते हैं।'},
+        {n:'पत्ती लपेटक', note:'पत्तियां लपेटकर प्रकाश संश्लेषण कम करते हैं।'} ],
+      diseases:[ {n:'धान झुलसा (ब्लास्ट)', note:'100% तक उपज हानि। पत्ती पर हीरे के आकार के धब्बे।'},
+        {n:'जीवाणु पत्ती झुलसा', note:'पत्तियों का मुरझाना, पीला पड़ना, सूखना।'},
+        {n:'शीथ ब्लाइट', note:'पत्ती के आवरण पर अंडाकार हरे-भूरे धब्बे।'} ] },
+    maize: { name:'मक्का', temp:'आदर्श ~30°C (26–34°C)। 13.5°C से नीचे वृद्धि धीमी, 38°C से ऊपर रुक जाती है।',
+      moisture:'20–25% दाना नमी पर कटाई करें; सुरक्षित भंडारण के लिए 14–15% तक सुखाएं।',
+      fert:'120:60:60 किग्रा N:P₂O₅:K₂O/हेक्टेयर। पूरा P+K बेसल। N बुवाई पर 1/3, घुटने की ऊंचाई पर 1/3, बाली निकलते समय 1/3। FYM 25 टन/हेक्टेयर मिट्टी सुधारता है।',
+      pests:[ {n:'फॉल आर्मीवर्म', note:'प्रमुख आक्रामक कीट, पत्तियों और भुट्टों को खाता है।'},
+        {n:'टिड्डे', note:'भारी मात्रा में पत्तियां खा जाते हैं।'},
+        {n:'तना छेदक', note:'तने में सुरंग बनाकर पौधे को कमज़ोर करते हैं।'} ],
+      diseases:[ {n:'पत्ती झुलसा', note:'टर्सिकम और मेडिस ब्लाइट बड़ा नुकसान करते हैं।'},
+        {n:'डाउनी मिल्ड्यू', note:'अधिक नमी में बढ़ता है, वृद्धि रोकता है।'},
+        {n:'तना व भुट्टा सड़न', note:'फफूंद/जीवाणु जनित, दाने में मायकोटॉक्सिन बनाते हैं।'} ] },
+    soybean: { name:'सोयाबीन', temp:'26.5–30°C आदर्श वृद्धि। अंकुरण के लिए मिट्टी का तापमान कम से कम 15.5°C।',
+      moisture:'लगभग 15% दाना नमी पर कटाई करें; दीर्घकालिक भंडारण के लिए 7–8% तक सुखाएं।',
+      fert:'अपनी 55–75% नाइट्रोजन खुद बनाता है; बुवाई-पूर्व N शायद ही ज़रूरी। बुवाई से पहले मिट्टी जांच अनुसार P व K दें; दाना भरने के समय सल्फर सुनिश्चित करें।',
+      pests:[ {n:'पत्ती खाने वाले कीट (बीन बीटल)', note:'फूल आने से पहले पत्ती क्षति 30% से अधिक हो तो उपचार करें।'},
+        {n:'कैटरपिलर', note:'समूह में पत्तियां खाते हैं; अंडों को हाथ से हटाएं।'},
+        {n:'तना मक्खी / गर्डल बीटल', note:'तने में सुरंग बनाकर मुरझाव पैदा करते हैं।'} ],
+      diseases:[ {n:'रतुआ (रस्ट)', note:'पत्तियों पर भूरे फफोले; मैंकोज़ेब या प्रोपिकोनाज़ोल से उपचार करें।'},
+        {n:'फली व राइज़ोक्टोनिया झुलसा', note:'फलियों का सड़ना; अधिक नाइट्रोजन से बचें।'},
+        {n:'वायरल मोज़ेक', note:'सफेद मक्खी से फैलता है; वाहक को नियंत्रित करें, कोई इलाज नहीं।'} ] },
+    groundnut: { name:'मूंगफली', temp:'25–35°C आदर्श, न्यूनतम 18°C। 33°C से ऊपर फूल गिर सकते हैं।',
+      moisture:'500–700 मिमी वर्षा चाहिए; पेगिंग व फली अवस्था सबसे नाज़ुक। कटाई पर 8–10% तक सुखाएं।',
+      fert:'स्टार्टर N केवल ~20 किग्रा/हेक्टेयर (दलहन)। 60 किग्रा P₂O₅ + 40 किग्रा K₂O/हेक्टेयर। कैल्शियम के लिए पेगिंग पर जिप्सम 400–500 किग्रा/हेक्टेयर। सल्फर 20–40 किग्रा/हेक्टेयर।',
+      pests:[ {n:'रस चूसक कीट', note:'माहू, जैसिड, थ्रिप्स, सफेद मक्खी।'},
+        {n:'सफेद ग्रब', note:'लार्वा जड़ों और फलियों को खाते हैं।'},
+        {n:'स्पोडोप्टेरा व हेलिकोवर्पा', note:'कैटरपिलर जो पत्तियां खा जाते हैं।'} ],
+      diseases:[ {n:'टिक्का पत्ती धब्बा', note:'सबसे आम फफूंद रोग, गहरे धब्बे।'},
+        {n:'रतुआ (रस्ट)', note:'पत्तियों पर नारंगी-भूरे फफोले।'},
+        {n:'बड नेक्रोसिस व अफ्लाटॉक्सिन', note:'वायरल (थ्रिप्स से फैलता है); अफ्लाटॉक्सिन सूखे के तनाव से जुड़ा है।'} ] },
+    cotton: { name:'कपास', temp:'25–35°C आदर्श। 15°C से नीचे वृद्धि तेज़ी से धीमी होती है।',
+      moisture:'600–1,200 मिमी/सीज़न। फूल व टिंडा बनने के लिए 75% क्षेत्र क्षमता चाहिए — सबसे संवेदनशील अवस्था।',
+      fert:'सिंचित: 120–150 N, 60–75 P₂O₅, 60–75 K₂O किग्रा/हेक्टेयर। पूरा P+K बेसल; N को 3–4 बार बांटें (बुवाई, स्क्वेरिंग, फूल, टिंडा)।',
+      pests:[ {n:'बॉलवर्म', note:'अमेरिकन और गुलाबी बॉलवर्म; फेरोमोन ट्रैप का उपयोग करें।'},
+        {n:'रस चूसक कीट', note:'माहू, जैसिड, सफेद मक्खी, थ्रिप्स, प्लांट बग।'} ],
+      diseases:[ {n:'जीवाणु झुलसा', note:'प्रतिरोधी किस्में और फसल चक्र अपनाएं।'},
+        {n:'फ्यूज़ेरियम/वर्टिसिलियम विल्ट', note:'बीज को कार्बेन्डाज़िम या ट्राइकोडर्मा से उपचारित करें।'},
+        {n:'पत्ती धब्बे', note:'अल्टरनेरिया, सर्कोस्पोरा — कॉपर/मैंकोज़ेब का छिड़काव करें।'} ] },
+    millets: { name:'बाजरा/मिलेट', temp:'अंकुरण के लिए न्यूनतम मिट्टी तापमान 8–10°C। आदर्श वृद्धि तापमान 26–29°C।',
+      moisture:'कम वर्षा सहनशील, 500–1000 मिमी/वर्ष चाहिए। सुरक्षित भंडारण के लिए 10–12% तक सुखाएं।',
+      fert:'रागी के लिए FYM 12.5 टन/हेक्टेयर + सनहेम्प। बाजरा: मिट्टी जांच अनुसार यूरिया 65किग्रा + SSP 167किग्रा + MOP 50किग्रा/हेक्टेयर।',
+      pests:[ {n:'गुलाबी तना छेदक व पत्ती लपेटक', note:'माहू, कटवर्म, लीफहॉपर के साथ मुख्य कीट।'},
+        {n:'टिड्डा', note:'युवा पौधों की पत्तियां खा जाता है।'} ],
+      diseases:[ {n:'ब्लास्ट', note:'रागी के लिए सबसे गंभीर, 80% तक हानि।'},
+        {n:'डाउनी मिल्ड्यू', note:'बुवाई से पहले बाजरे के बीज को मेटालैक्सिल से उपचारित करें।'},
+        {n:'सर्कोस्पोरा पत्ती धब्बा व कंडुआ', note:'यह भी आम है; फसल चक्र मदद करता है।'} ] },
+    gram: { name:'चना/दलहन', temp:'सामान्य वृद्धि के लिए 8–22°C। परिपक्वता पर दिन में 37.5–40°C सहन करता है।',
+      moisture:'केवल 1–2 सिंचाई चाहिए (बुवाई के 40–45 व 60–65 दिन बाद)। 8.88–11% नमी पर भंडारण करें।',
+      fert:'बेसल: 50 किग्रा DAP + 20 किग्रा MOP/एकड़। राइज़ोबियम जैव-उर्वरक से बीज उपचार। 90 व 110 दिन पर 2% यूरिया का पत्तियों पर छिड़काव।',
+      pests:[ {n:'चना फली छेदक', note:'सबसे गंभीर कीट। एज़ाडिरेक्टिन, HaNPV, या Bt जैव-कीटनाशक इस्तेमाल करें।'} ],
+      diseases:[ {n:'फ्यूज़ेरियम विल्ट', note:'मिट्टी जनित। ट्राइकोडर्मा हार्ज़ियानम एक प्रभावी जैव-नियंत्रक है।'} ] },
+    sugarcane: { name:'गन्ना', temp:'अंकुरण व वृद्धि के लिए 28–35°C। ठंडी रातें (12–20°C) शक्कर संचय में मदद करती हैं।',
+      moisture:'1,500–2,500 मिमी पानी चाहिए। सबसे संवेदनशील अवस्थाएं: अंकुरण, कल्ले निकलना, प्रमुख वृद्धि।',
+      fert:'250–300 किग्रा N, 80–100 किग्रा P₂O₅, 120–150 किग्रा K₂O/हेक्टेयर (मुख्य फसल)। रैटून को 20–30% अधिक N चाहिए। N को 3–4 खुराकों में बांटें।',
+      pests:[ {n:'छेदक कीट', note:'शूट, टॉप, तना, गांठ छेदक डेड हार्ट बनाते हैं।'},
+        {n:'रस चूसक', note:'ब्लैक बग, थ्रिप्स — गर्म सूखे मौसम में गंभीर।'},
+        {n:'आर्मीवर्म', note:'पत्तियां खाता है, रैटून फसलों में आम।'} ],
+      diseases:[ {n:'रेड रॉट', note:'भारत में बड़ा खतरा — तने का अंदर से लाल होना।'},
+        {n:'विल्ट व सेट रॉट', note:'बढ़वार रुकना, पीलापन, रोपण सामग्री का सड़ना।'},
+        {n:'ग्रासी शूट व पोक्काह बोएंग', note:'फाइटोप्लाज़्मा/फफूंद — विकृत, मुड़ी हुई पत्तियां।'} ] }
+  }
+};
+var cropOrder = ['rice','maize','soybean','groundnut','cotton','millets','gram','sugarcane'];
+var activeCrop = 'rice';
+
+/* ============ language switching ============ */
+function setLang(lang){
+  currentLang = lang;
+  document.getElementById('htmlRoot').setAttribute('lang', lang);
+  document.body.classList.toggle('lang-hi', lang==='hi');
+  document.getElementById('btnEn').classList.toggle('active', lang==='en');
+  document.getElementById('btnHi').classList.toggle('active', lang==='hi');
+
+  var nodes = document.querySelectorAll('[data-i18n]');
+  var t = uiText[lang];
+  for (var i=0;i<nodes.length;i++){
+    var key = nodes[i].getAttribute('data-i18n');
+    if (t[key] !== undefined) nodes[i].textContent = t[key];
+  }
+  document.getElementById('chatInput').placeholder = t.chatPlaceholder;
+  document.getElementById('voiceToggleLabel').textContent = voiceOutEnabled ? t.voiceOn : t.voiceOff;
+
+  fillCropSelect(document.getElementById('globalCropSelect'));
+  buildCropTabs();
+  renderGuide();
+  buildChatChips();
+}
+
+/* ============ crop selectors ============ */
+function fillCropSelect(sel){
+  var data = cropData[currentLang];
+  var html = '';
+  for (var i=0;i<cropOrder.length;i++){ var id=cropOrder[i]; html += '<option value="'+id+'"'+(id===activeCrop?' selected':'')+'>'+data[id].name+'</option>'; }
+  sel.innerHTML = html;
+}
+function onGlobalCropChange(){
+  activeCrop = document.getElementById('globalCropSelect').value;
+  renderGuide();
+}
+document.addEventListener('DOMContentLoaded', function(){
+  var gsel = document.getElementById('globalCropSelect');
+  fillCropSelect(gsel);
+  gsel.addEventListener('change', onGlobalCropChange);
+});
+
+/* ============ crop guide section ============ */
+function iconSvg(kind){
+  if (kind==='thermo') return '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+  if (kind==='drop') return '<path d="M12 2s7 8 7 13a7 7 0 1 1-14 0c0-5 7-13 7-13z"/>';
+  if (kind==='leaf') return '<path d="M5 21c0-9 6-16 16-16-1 10-7 16-16 16z"/><path d="M5 21c3-3 6-6 9-11"/>';
+  if (kind==='bug') return '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>';
+  return '';
+}
+function buildCropTabs(){
+  var data = cropData[currentLang];
+  var wrap = document.getElementById('cropTabs');
+  var html = '';
+  for (var i=0;i<cropOrder.length;i++){
+    var id = cropOrder[i];
+    html += '<button class="crop-tab'+(id===activeCrop?' active':'')+'" data-crop="'+id+'" onclick="selectGuideCrop(\''+id+'\')">'+data[id].name+'</button>';
+  }
+  wrap.innerHTML = html;
+}
+function selectGuideCrop(id){
+  activeCrop = id;
+  document.getElementById('globalCropSelect').value = id;
+  var tabs = document.querySelectorAll('.crop-tab');
+  for (var i=0;i<tabs.length;i++){ tabs[i].classList.toggle('active', tabs[i].getAttribute('data-crop')===id); }
+  renderGuide();
+}
+function listBlock(items){
+  var html = '';
+  for (var i=0;i<items.length;i++){ html += '<div class="gb-item"><div class="name">'+items[i].n+'</div><div class="note">'+items[i].note+'</div></div>'; }
+  return html;
+}
+function renderGuide(){
+  var c = cropData[currentLang][activeCrop];
+  var t = uiText[currentLang];
+  document.getElementById('guideCols').innerHTML =
+    '<div class="guide-block"><div class="gb-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+iconSvg('thermo')+'</svg><span class="gb-title">'+t.guideTemp+'</span></div><p class="gb-text">'+c.temp+'</p></div>'+
+    '<div class="guide-block"><div class="gb-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+iconSvg('drop')+'</svg><span class="gb-title">'+t.guideMoisture+'</span></div><p class="gb-text">'+c.moisture+'</p></div>'+
+    '<div class="guide-block"><div class="gb-head amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+iconSvg('leaf')+'</svg><span class="gb-title">'+t.guideFert+'</span></div><p class="gb-text">'+c.fert+'</p></div>'+
+    '<div class="guide-block"><div class="gb-head danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+iconSvg('bug')+'</svg><span class="gb-title">'+t.guidePests+'</span></div>'+listBlock(c.pests)+'</div>'+
+    '<div class="guide-block" style="grid-column:1 / -1"><div class="gb-head danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+iconSvg('bug')+'</svg><span class="gb-title">'+t.guideDiseases+'</span></div>'+listBlock(c.diseases)+'</div>';
+}
+
+/* ============ photo upload + scan ============ */
+var dropzone = document.getElementById('dropzone');
+['dragenter','dragover'].forEach(function(evt){
+  dropzone.addEventListener(evt, function(e){ e.preventDefault(); dropzone.classList.add('drag'); });
+});
+['dragleave','drop'].forEach(function(evt){
+  dropzone.addEventListener(evt, function(e){ e.preventDefault(); dropzone.classList.remove('drag'); });
+});
+dropzone.addEventListener('drop', function(e){
+  var file = e.dataTransfer.files && e.dataTransfer.files[0];
+  if (file) processFile(file);
+});
+
+function handleFile(e){
+  var file = e.target.files && e.target.files[0];
+  if (file) processFile(file);
+}
+
+function processFile(file){
+  if (!file.type || file.type.indexOf('image') !== 0){
+    alert('Please upload an image file (JPG or PNG).');
+    return;
+  }
+  var reader = new FileReader();
+  reader.onload = function(e){
+    var img = document.getElementById('previewImg');
+    img.src = e.target.result;
+    img.classList.add('show');
+    runScan(e.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+
+function analyzeLeafImage(dataUrl, callback){
+  var img = new Image();
+  img.onload = function(){
+    var size = 60;
+    var canvas = document.createElement('canvas');
+    canvas.width = size; canvas.height = size;
+    var ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, size, size);
+    var data;
+    try{ data = ctx.getImageData(0,0,size,size).data; }
+    catch(err){ callback({category:'healthy', ratio:0.1}); return; }
+    var total=0, greenCount=0, brownYellowCount=0, darkCount=0;
+    for (var i=0;i<data.length;i+=4){
+      var r=data[i], g=data[i+1], b=data[i+2];
+      var brightness=(r+g+b)/3; total++;
+      if (brightness<60){ darkCount++; }
+      else if (g > r*1.12 && g > b*1.12){ greenCount++; }
+      else if (r>95 && g>70 && b<95 && r>=g*0.9){ brownYellowCount++; }
+    }
+    var darkRatio = darkCount/total, byRatio = brownYellowCount/total;
+    var category, ratio;
+    if (darkRatio>0.07){ category='lesion'; ratio=darkRatio; }
+    else if (byRatio>0.16){ category='discoloration'; ratio=byRatio; }
+    else { category='healthy'; ratio=greenCount/total; }
+    callback({category:category, ratio:ratio});
+  };
+  img.onerror = function(){ callback({category:'healthy', ratio:0.1}); };
+  img.src = dataUrl;
+}
+
+function findMatch(cropId, keywordsEn){
+  var cropEn = cropData.en[cropId];
+  var cropLoc = cropData[currentLang][cropId];
+  if (!cropEn) return null;
+  for (var i=0;i<cropEn.diseases.length;i++){
+    var text = (cropEn.diseases[i].n+' '+cropEn.diseases[i].note).toLowerCase();
+    for (var k=0;k<keywordsEn.length;k++){
+      if (text.indexOf(keywordsEn[k])!==-1) return cropLoc.diseases[i];
+    }
+  }
+  return null;
+}
+
+function runScan(dataUrl){
+  var progress = document.getElementById('scanProgress');
+  var result = document.getElementById('resultCard');
+  result.classList.remove('show');
+  progress.classList.add('show');
+  var cropId = activeCrop;
+
+  analyzeLeafImage(dataUrl, function(analysis){
+    setTimeout(function(){
+      progress.classList.remove('show');
+      renderResult(analysis, cropId);
+      result.classList.add('show');
+    }, 1000);
+  });
+}
+
+function renderResult(analysis, cropId){
+  var crop = cropData[currentLang][cropId];
+  var t = uiText[currentLang];
+  var confidence = Math.round(60 + Math.min(analysis.ratio,1)*36);
+  var areaPct = Math.round(analysis.ratio*100);
+  var title, action, matched, badgeBg, iconColor;
+
+  if (analysis.category==='lesion'){
+    matched = findMatch(cropId, ['spot','blast','blight','rot','rust']);
+    title = matched ? matched.n : t.lesionTitle;
+    action = matched ? matched.note : t.lesionAction;
+    badgeBg = '#fbeee0'; iconColor = '#B9761A';
+  } else if (analysis.category==='discoloration'){
+    matched = findMatch(cropId, ['wilt','mildew','mosaic','blight']);
+    title = matched ? matched.n : t.discolorTitle;
+    action = matched ? matched.note : t.discolorAction.replace('{crop}', crop.name);
+    badgeBg = '#fbeee0'; iconColor = '#B9761A';
+  } else {
+    matched = null;
+    title = t.healthyTitle;
+    action = t.healthyAction.replace('{crop}', crop.name);
+    badgeBg = '#eaf3de'; iconColor = '#6E8F5C';
+  }
+
+  var compareHtml = '<div style="margin-top:10px;border-top:1px solid #eef1ea;padding-top:8px;">'+
+    '<div style="font-size:10.5px;font-weight:700;color:var(--mute);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">'+t.compareLabel.replace('{crop}', crop.name)+'</div>';
+  for (var i=0;i<Math.min(2,crop.diseases.length);i++){
+    var d = crop.diseases[i];
+    var isMatch = matched && matched.n===d.n;
+    compareHtml += '<div style="display:flex;justify-content:space-between;font-size:11.5px;padding:4px 0;'+(isMatch?'font-weight:700;':'')+'"><span>'+d.n+'</span>'+(isMatch?'<span style="background:var(--wheat);color:var(--forest);font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:8px;">'+t.closestMatch+'</span>':'')+'</div>';
+  }
+  compareHtml += '</div>';
+
+  document.getElementById('resultCard').innerHTML =
+    '<div class="rc-head"><span class="rc-badge" style="background:'+badgeBg+'"><svg viewBox="0 0 24 24" fill="none" stroke="'+iconColor+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>'+
+    '<div><div class="rc-title">'+title+'</div><div class="rc-conf">'+t.confidenceLabel.replace('{conf}', confidence)+'</div></div></div>'+
+    '<div class="rc-row"><span>'+t.resultCrop+'</span><span>'+crop.name+'</span></div>'+
+    '<div class="rc-row"><span>'+t.resultArea+'</span><span>~'+areaPct+'%</span></div>'+
+    '<div class="rc-row"><span>'+t.resultMethod+'</span><span>'+t.resultMethodVal+'</span></div>'+
+    '<div class="rc-action">'+action+'</div>'+ compareHtml;
+
+  addChatMessage('bot', t.scanComplete.replace('{crop}', crop.name).replace('{title}', title).replace('{conf}', confidence));
+  publishCropHealthResult(analysis, cropId, title, confidence);
+}
+
+/* ============ chat assistant ============ */
+var chatLog = document.getElementById('chatLog');
+
+function addChatMessage(who, text){
+  var div = document.createElement('div');
+  div.className = 'msg ' + who;
+  div.textContent = text;
+  chatLog.appendChild(div);
+  chatLog.scrollTop = chatLog.scrollHeight;
+  if (who === 'bot') speakText(text);
+}
+
+function buildChatChips(){
+  var chips = uiText[currentLang].chips;
+  var wrap = document.getElementById('chatChips');
+  var html = '';
+  for (var i=0;i<chips.length;i++){ html += '<span class="chip" onclick="askChip(\''+chips[i].replace(/'/g,"\\'")+'\')">'+chips[i]+'</span>'; }
+  wrap.innerHTML = html;
+}
+function askChip(text){
+  document.getElementById('chatInput').value = text;
+  sendChat();
+}
+
+function sendChat(){
+  var input = document.getElementById('chatInput');
+  var text = input.value.trim();
+  if (!text) return;
+  addChatMessage('user', text);
+  input.value = '';
+  setTimeout(function(){ addChatMessage('bot', answerQuestion(text)); }, 450);
+}
+
+function answerQuestion(raw){
+  var text = raw.toLowerCase();
+  var crop = cropData[currentLang][activeCrop];
+  var t = uiText[currentLang];
+
+  var isIrrig = text.indexOf('irrigat')!==-1 || text.indexOf('water')!==-1 || text.indexOf('सिंचाई')!==-1 || text.indexOf('पानी')!==-1;
+  var isFert = text.indexOf('fertiliz')!==-1 || text.indexOf('nutrient')!==-1 || text.indexOf('urea')!==-1 || text.indexOf('उर्वरक')!==-1 || text.indexOf('खाद')!==-1;
+  var isPest = text.indexOf('pest')!==-1 || text.indexOf('insect')!==-1 || text.indexOf('bug')!==-1 || text.indexOf('कीट')!==-1;
+  var isDisease = text.indexOf('disease')!==-1 || text.indexOf('blight')!==-1 || text.indexOf('rot')!==-1 || text.indexOf('rust')!==-1 || text.indexOf('spot')!==-1 || text.indexOf('wilt')!==-1 || text.indexOf('रोग')!==-1 || text.indexOf('बीमारी')!==-1;
+  var isTemp = text.indexOf('temp')!==-1 || text.indexOf('heat')!==-1 || text.indexOf('hot')!==-1 || text.indexOf('cold')!==-1 || text.indexOf('तापमान')!==-1 || text.indexOf('गर्मी')!==-1;
+  var isAlert = text.indexOf('alert')!==-1 || text.indexOf('warning')!==-1 || text.indexOf('अलर्ट')!==-1 || text.indexOf('चेतावनी')!==-1;
+  var isWeather = text.indexOf('weather')!==-1 || text.indexOf('rain')!==-1 || text.indexOf('forecast')!==-1 || text.indexOf('मौसम')!==-1 || text.indexOf('बारिश')!==-1;
+  var isScan = text.indexOf('scan')!==-1 || text.indexOf('photo')!==-1 || text.indexOf('upload')!==-1 || text.indexOf('camera')!==-1 || text.indexOf('फोटो')!==-1 || text.indexOf('स्कैन')!==-1;
+
+  if (isIrrig) { var liveM = liveFieldData.n3_m; var liveLine = (liveM!==undefined && liveM!==null && !isNaN(Number(liveM))) ? (' Live Zone 3 soil moisture is '+Number(liveM).toFixed(1)+'%.') : ''; return t.irrigAns.replace('{crop}', crop.name).replace('{data}', crop.moisture).replace('{live}', liveLine); }
+  if (isFert) return t.fertAns.replace('{crop}', crop.name).replace('{data}', crop.fert);
+  if (isPest) return t.pestAns.replace('{crop}', crop.name).replace('{data}', crop.pests.map(function(x){ return x.n + ' — ' + x.note; }).join(' '));
+  if (isDisease) return t.diseaseAns.replace('{crop}', crop.name).replace('{data}', crop.diseases.map(function(x){ return x.n + ' — ' + x.note; }).join(' '));
+  if (isTemp) return t.tempAns.replace('{crop}', crop.name).replace('{data}', crop.temp);
+  if (isAlert) return t.alertsLabel.join('  ');
+  if (isWeather) return t.weatherAns;
+  if (isScan) return t.scanHelp.replace('{crop}', crop.name);
+  return t.fallback.replace('{crop}', crop.name);
+}
+
+/* ============ voice output (text-to-speech, female voice) ============ */
+var voiceOutEnabled = true;
+var cachedVoices = [];
+function loadVoices(){ cachedVoices = window.speechSynthesis ? window.speechSynthesis.getVoices() : []; }
+if (window.speechSynthesis){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+}
+function pickFemaleVoice(langCode){
+  var candidates = cachedVoices.filter(function(v){ return v.lang && v.lang.toLowerCase().indexOf(langCode)===0; });
+  if (!candidates.length) candidates = cachedVoices;
+  var female = candidates.find(function(v){ return /female|woman|girl/i.test(v.name); });
+  if (female) return female;
+  var known = candidates.find(function(v){ return /zira|susan|samantha|google हिन्दी|google hindi|heera|lekha|veena|kalpana/i.test(v.name); });
+  if (known) return known;
+  return candidates[0] || null;
+}
+function speakText(text){
+  if (!voiceOutEnabled || !window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  var utter = new SpeechSynthesisUtterance(text);
+  var langCode = currentLang === 'hi' ? 'hi' : 'en';
+  utter.lang = currentLang === 'hi' ? 'hi-IN' : 'en-IN';
+  var voice = pickFemaleVoice(langCode);
+  if (voice) utter.voice = voice;
+  utter.pitch = 1.15;
+  utter.rate = 0.98;
+  window.speechSynthesis.speak(utter);
+}
+function toggleVoiceOut(){
+  voiceOutEnabled = !voiceOutEnabled;
+  var btn = document.getElementById('voiceToggle');
+  btn.classList.toggle('on', voiceOutEnabled);
+  document.getElementById('voiceToggleLabel').textContent = voiceOutEnabled ? uiText[currentLang].voiceOn : uiText[currentLang].voiceOff;
+  if (!voiceOutEnabled && window.speechSynthesis) window.speechSynthesis.cancel();
+}
+
+/* ============ voice input (speech-to-text) ============ */
+var recognition = null;
+var listening = false;
+var SpeechRecognitionCtor = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (SpeechRecognitionCtor){
+  recognition = new SpeechRecognitionCtor();
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+  recognition.onresult = function(e){
+    var transcript = e.results[0][0].transcript;
+    document.getElementById('chatInput').value = transcript;
+    sendChat();
+  };
+  recognition.onend = function(){
+    listening = false;
+    document.getElementById('micBtn').classList.remove('listening');
+  };
+  recognition.onerror = function(){
+    listening = false;
+    document.getElementById('micBtn').classList.remove('listening');
+  };
+}
+function toggleMic(){
+  if (!recognition){
+    alert('Voice input is not supported in this browser. Try Chrome on Android or desktop.');
+    return;
+  }
+  if (listening){
+    recognition.stop();
+    return;
+  }
+  recognition.lang = currentLang === 'hi' ? 'hi-IN' : 'en-IN';
+  try{
+    recognition.start();
+    listening = true;
+    document.getElementById('micBtn').classList.add('listening');
+  }catch(err){ /* already started */ }
+}
+
+/* ============ init ============ */
+buildCropTabs();
+renderGuide();
+buildChatChips();
+addChatMessage('bot', uiText.en.greeting);
+setLang('en');
+</script>
+</body>
+</html>
